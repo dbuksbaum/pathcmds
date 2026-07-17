@@ -1,3 +1,4 @@
+// Package cmd implements the CLI commands for the pathcmds utility.
 package cmd
 
 import (
@@ -10,9 +11,13 @@ import (
 )
 
 var (
+	// flagSystem triggers filtering and display of system command directories.
 	flagSystem bool
+	// flagUser triggers filtering and display of user command directories.
 	flagUser   bool
+	// flagApps triggers filtering and display of application command directories.
 	flagApps   bool
+	// flagPage enables pagination of outputs through 'less -R'.
 	flagPage   bool
 )
 

@@ -1,6 +1,6 @@
 # Binaries and build directory
 /bin/
-pathcmds
+/pathcmds
 
 # Test binaries and coverage files
 *.test
