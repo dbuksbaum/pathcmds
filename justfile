@@ -34,3 +34,26 @@ clean:
 # Run the utility immediately with optional CLI flags (e.g. just run "--system --page")
 run flags="":
 	go run -mod=vendor main.go {{flags}}
+
+# Run all CI checks: format check, vet (lint), typecheck, and unit tests
+ci: fmt-check lint typecheck test
+
+# Verify all Go source files are formatted correctly
+fmt-check:
+	@if [ -n "$(gofmt -l cmd pkg main.go)" ]; then \
+		echo "The following files are not formatted correctly. Please run 'go fmt ./...':"; \
+		gofmt -l cmd pkg main.go; \
+		exit 1; \
+	fi
+
+# Lint the codebase using go vet
+lint:
+	go vet -mod=vendor ./...
+
+# Verify that the project compiles correctly without writing the binary
+typecheck:
+	go build -mod=vendor -o /dev/null main.go
+
+# Run the unit tests with coverage
+test:
+	go test -mod=vendor -v -cover ./...

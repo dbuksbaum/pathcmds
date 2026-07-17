@@ -23,7 +23,7 @@ func NewCategorizer() *Categorizer {
 	// App pattern matches specific toolchains, SDKs, applications, or runtimes.
 	// Examples: .cargo/bin, .rustup, .dotnet/sdk, nvm, node, go/bin, .rvm, .pyenv, Applications, etc.
 	appPattern := `(?i)(\.dotnet|\.cargo|\.rustup|/go/bin|\.nvm|\.n/bin|/node/|pnpm|yarn|\.rvm|\.pyenv|/Library/Android/|/Applications/|/Library/Developer/|/sdk/|/toolchains/|\.local/share/|cellar)`
-	
+
 	return &Categorizer{
 		appRegex: regexp.MustCompile(appPattern),
 	}

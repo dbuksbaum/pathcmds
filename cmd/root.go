@@ -14,11 +14,11 @@ var (
 	// flagSystem triggers filtering and display of system command directories.
 	flagSystem bool
 	// flagUser triggers filtering and display of user command directories.
-	flagUser   bool
+	flagUser bool
 	// flagApps triggers filtering and display of application command directories.
-	flagApps   bool
+	flagApps bool
 	// flagPage enables pagination of outputs through 'less -R'.
-	flagPage   bool
+	flagPage bool
 )
 
 // RootCmd represents the base command when called without any subcommands.

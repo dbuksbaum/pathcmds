@@ -11,7 +11,7 @@ var (
 	// execLookPath is a variable wrapper around exec.LookPath to facilitate unit testing.
 	execLookPath = exec.LookPath
 	// execCommand is a variable wrapper around exec.Command to facilitate unit testing.
-	execCommand  = exec.Command
+	execCommand = exec.Command
 )
 
 // Pager manages spawning the 'less -R' paging sub-process and piping output into it.

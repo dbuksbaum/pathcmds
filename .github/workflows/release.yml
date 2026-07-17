@@ -1,0 +1,88 @@
+name: Release Build
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-release:
+    name: Build Release Binaries
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+            ext: ""
+          - goos: linux
+            goarch: arm64
+            ext: ""
+          - goos: darwin
+            goarch: amd64
+            ext: ""
+          - goos: darwin
+            goarch: arm64
+            ext: ""
+          - goos: windows
+            goarch: amd64
+            ext: .exe
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.26.x'
+        cache: true
+
+    - name: Build Binary
+      run: |
+        GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -mod=vendor -o pathcmds-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.ext }} main.go
+
+    - name: Package Binary (Unix)
+      if: matrix.goos != 'windows'
+      run: |
+        tar -czvf pathcmds-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz pathcmds-${{ matrix.goos }}-${{ matrix.goarch }} LICENSE README.md
+
+    - name: Package Binary (Windows)
+      if: matrix.goos == 'windows'
+      run: |
+        zip pathcmds-${{ matrix.goos }}-${{ matrix.goarch }}.zip pathcmds-${{ matrix.goos }}-${{ matrix.goarch }}.exe LICENSE README.md
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: binaries-${{ matrix.goos }}-${{ matrix.goarch }}
+        path: |
+          *.tar.gz
+          *.zip
+
+  create-release:
+    name: Create GitHub Release
+    needs: build-release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Download Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        merge-multiple: true
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          *.tar.gz
+          *.zip
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
