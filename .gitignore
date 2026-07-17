@@ -1,0 +1,12 @@
+# Binaries and build directory
+/bin/
+pathcmds
+
+# Test binaries and coverage files
+*.test
+*.out
+*.prof
+
+# Operating system files
+.DS_Store
+Thumbs.db
